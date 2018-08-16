@@ -348,7 +348,10 @@ public class NavigationBarController implements
         });
     }
 
-    void removeNavigationBar(int displayId) {
+    /**
+     * @hide
+     */
+    public void removeNavigationBar(int displayId) {
         NavigationBar navBar = mNavigationBars.get(displayId);
         if (navBar != null) {
             navBar.destroyView();

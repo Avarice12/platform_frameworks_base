@@ -731,6 +731,7 @@ public class StatusBar extends SystemUI implements
     private final ColorExtractor.OnColorsChangedListener mOnColorsChangedListener =
             (extractor, which) -> updateTheme();
 
+    private boolean mShowNavBar;
 
     /**
      * Public constructor for StatusBar.
@@ -1253,7 +1254,7 @@ public class StatusBar extends SystemUI implements
         mHeadsUpManager.addListener(mVisualStabilityManager);
         mNotificationPanelViewController.setHeadsUpManager(mHeadsUpManager);
 
-        createNavigationBar(result);
+        updateNavigationBar(true);
 
         if (ENABLE_LOCKSCREEN_WALLPAPER && mWallpaperSupported) {
             mLockscreenWallpaper = mLockscreenWallpaperLazy.get();
@@ -2120,6 +2121,24 @@ public class StatusBar extends SystemUI implements
         AnimateExpandSettingsPanelMessage(String subpanel) {
             mSubpanel = subpanel;
         }
+    }
+
+    private void updateNavigationBar(boolean init) {
+        boolean showNavBar = SyberiaUtils.deviceSupportNavigationBar(mContext);
+        if (init) {
+            if (showNavBar) {
+                mNavigationBarController.createNavigationBars(true, null);
+            }
+        } else {
+            if (showNavBar != mShowNavBar) {
+                if (showNavBar) {
+                    mNavigationBarController.createNavigationBars(true, null);
+                } else {
+                    mNavigationBarController.removeNavigationBar(mDisplayId);
+                }
+            }
+        }
+        mShowNavBar = showNavBar;
     }
 
     private void maybeEscalateHeadsUp() {
@@ -4061,6 +4080,9 @@ public class StatusBar extends SystemUI implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FORCE_SHOW_NAVBAR),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -4072,6 +4094,9 @@ public class StatusBar extends SystemUI implements
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE))) {
                 setLockscreenDoubleTapToSleep();
+            } else if (uri.equals(Settings.System.getUriFor(
+		    Settings.System.FORCE_SHOW_NAVBAR))) {
+                updateNavigationBar(false);
             }
         }
 
