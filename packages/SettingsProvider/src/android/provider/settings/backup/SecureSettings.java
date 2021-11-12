@@ -199,5 +199,6 @@ public class SecureSettings {
         Settings.Secure.SHOW_BACK_ARROW_GESTURE,
         Settings.Secure.STATUS_BAR_SHOW_VIBRATE_ICON,
         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
+        Settings.Secure.SHOW_COMBINED_STATUS_BAR_SIGNAL_ICONS,
     };
 }
