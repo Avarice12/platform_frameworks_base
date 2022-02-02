@@ -279,6 +279,7 @@ import com.android.internal.util.DumpUtils;
 import com.android.internal.util.Preconditions;
 import com.android.internal.util.XmlUtils;
 import com.android.internal.util.function.TriPredicate;
+import com.android.internal.widget.LockPatternUtils;
 import com.android.server.app.AppLockManagerServiceInternal;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.server.DeviceIdleInternal;
