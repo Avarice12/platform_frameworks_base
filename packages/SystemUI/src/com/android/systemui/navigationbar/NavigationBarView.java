@@ -93,6 +93,7 @@ import com.android.systemui.statusbar.phone.AutoHideController;
 import com.android.systemui.statusbar.phone.LightBarTransitionsController;
 import com.android.systemui.statusbar.phone.NotificationPanelViewController;
 import com.android.systemui.statusbar.phone.StatusBar;
+import com.android.systemui.tuner.TunerService;
 import com.android.wm.shell.legacysplitscreen.LegacySplitScreen;
 import com.android.wm.shell.pip.Pip;
 
@@ -104,7 +105,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 
 public class NavigationBarView extends FrameLayout implements
-        NavigationModeController.ModeChangedListener {
+        NavigationModeController.ModeChangedListener, TunerService.Tunable {
     final static boolean DEBUG = false;
     final static String TAG = "NavBarView";
 
@@ -112,6 +113,9 @@ public class NavigationBarView extends FrameLayout implements
     private final RegionSamplingHelper mRegionSamplingHelper;
     private final int mNavColorSampleMargin;
     private final SysUiState mSysUiFlagContainer;
+
+    private static final String NAVBAR_STYLE =
+            "system:" + Settings.System.NAVBAR_STYLE;
 
     // The current view is one of mHorizontal or mVertical depending on the current configuration
     View mCurrentView = null;
@@ -1351,6 +1355,8 @@ public class NavigationBarView extends FrameLayout implements
         requestApplyInsets();
         reorient();
         onNavigationModeChanged(mNavBarMode);
+        final TunerService tunerService = Dependency.get(TunerService.class);
+        tunerService.addTunable(this, NAVBAR_STYLE);
         if (mRotationButtonController != null) {
             mRotationButtonController.registerListeners();
         }
@@ -1382,6 +1388,13 @@ public class NavigationBarView extends FrameLayout implements
         mEdgeBackGestureHandler.onNavBarDetached();
         getViewTreeObserver().removeOnComputeInternalInsetsListener(
                 mOnComputeInternalInsetsListener);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        if (NAVBAR_STYLE.equals(key)) {
+            reloadNavIcons();
+        }
     }
 
     public void dump(PrintWriter pw) {
