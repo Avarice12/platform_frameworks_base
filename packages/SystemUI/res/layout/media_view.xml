@@ -194,7 +194,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="@*android:string/config_headlineFontFamilyMedium"
         android:singleLine="true"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:paddingStart="2dp" />
 
     <!-- Artist name -->
     <TextView
@@ -204,7 +205,8 @@
         android:fontFamily="@*android:string/config_headlineFontFamily"
         android:singleLine="true"
         style="@style/MediaPlayer.Subtitle"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:paddingStart="2dp" />
 
     <com.android.internal.widget.CachingIconView
         android:id="@+id/icon"
