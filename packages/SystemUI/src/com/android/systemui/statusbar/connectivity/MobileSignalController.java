@@ -717,11 +717,9 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
         IconState qsIcon = null;
         CharSequence qsDescription = null;
 
+        boolean pm = mProviderModelSetting || mProviderModelBehavior;
         if (mCurrentState.dataSim) {
-            if (mProviderModelBehavior) {
-                return new QsInfo(qsTypeIcon, qsIcon, qsDescription);
-            }
-
+            // If using provider model behavior, only show QS icons if the state is also default
             if (mCurrentState.showQuickSettingsRatIcon() || mConfig.alwaysShowDataRatIcon) {
                 qsTypeIcon = dataTypeIcon;
             }
@@ -745,7 +743,7 @@ public class MobileSignalController extends SignalController<MobileState, Mobile
 
         if (mProviderModelBehavior) {
             boolean showDataIconStatusBar = (mCurrentState.dataConnected || dataDisabled)
-                    && (mCurrentState.dataSim && mCurrentState.isDefault);
+                    && mCurrentState.dataSim;
             typeIcon =
                     ((showDataIconStatusBar || mConfig.alwaysShowDataRatIcon) && getVolteResId() == 0) ? dataTypeIcon : 0;
             showDataIconStatusBar |= mCurrentState.roaming;
