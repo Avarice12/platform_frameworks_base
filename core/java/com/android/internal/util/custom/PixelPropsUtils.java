@@ -145,7 +145,9 @@ public class PixelPropsUtils {
             "bramble",
             "sunfish",
             "coral",
-            "flame"
+            "flame",
+            "bonito",
+            "sargo"
     };
 
     private static volatile boolean sIsGms = false;
